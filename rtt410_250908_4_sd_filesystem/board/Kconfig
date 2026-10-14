@@ -1,0 +1,68 @@
+menu "Hardware Drivers Config"
+
+config SOC_STM32H750XB
+    bool
+    select SOC_SERIES_STM32H7
+    select RT_USING_COMPONENTS_INIT
+    select RT_USING_USER_MAIN
+    default y
+
+menu "Onboard Peripheral Drivers"
+
+endmenu
+
+menu "On-chip Peripheral Drivers"
+
+    config BSP_USING_GPIO
+        bool "Enable GPIO"
+        select RT_USING_PIN
+        default y
+
+    menuconfig BSP_USING_UART
+        bool "Enable UART"
+        default y
+        select RT_USING_SERIAL
+        if BSP_USING_UART
+            config BSP_USING_UART4
+                bool "Enable UART4 (FinSH)"
+                default y
+
+        endif
+    
+    config BSP_USING_SDRAM
+        bool "Enable SDRAM"
+        default y
+
+
+    menuconfig BSP_USING_SPI
+        bool "Enable SPI"
+        default n
+        select RT_USING_SPI
+        if BSP_USING_SPI
+            config BSP_USING_SPI1
+                bool "Enable SPI1 (flash)"
+                default n
+        endif
+
+    menuconfig BSP_USING_SDIO_ARTPI
+        bool "Enable SDIO"
+        default n
+        select RT_USING_SDIO
+        if BSP_USING_SDIO_ARTPI
+            config BSP_USING_SDIO1
+                bool "Enable SDIO1"
+                default n
+            config BSP_USING_SDIO2
+                bool "Enable SDIO2"
+                default n
+        endif
+
+    source "$SDK_DIR/libraries/HAL_Drivers/Kconfig" 
+    
+endmenu
+
+menu "Board extended module Drivers"
+
+endmenu
+ 
+endmenu

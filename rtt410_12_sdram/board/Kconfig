@@ -1,0 +1,53 @@
+menu "Hardware Drivers Config"
+
+config SOC_STM32H750XB
+    bool
+    select SOC_SERIES_STM32H7
+    select RT_USING_COMPONENTS_INIT
+    select RT_USING_USER_MAIN
+    default y
+
+menu "Onboard Peripheral Drivers"
+
+endmenu
+
+menu "On-chip Peripheral Drivers"
+
+
+    menuconfig BSP_USING_UART
+        bool "Enable UART"
+        default n
+        if BSP_USING_UART
+            config BSP_USING_UART4
+                bool "Enable UART4 (FinSH)"
+                default n
+
+            menu "UART4 Configuration"
+                depends on BSP_USING_UART4
+
+                config BSP_UART4_RX_BUFSIZE
+                    int "RX buffer size"
+                    default 256
+
+                config BSP_UART4_TX_BUFSIZE
+                    int "TX buffer size"
+                    default 256
+
+            endmenu
+
+        endif
+
+    config BSP_USING_SDRAM
+        bool "Enable SDRAM"
+        default n
+
+
+    source "$SDK_DIR/libraries/HAL_Drivers/Kconfig"
+    
+endmenu
+
+menu "Board extended module Drivers"
+
+endmenu
+ 
+endmenu

@@ -1,0 +1,36 @@
+import os
+import rtconfig
+from building import *
+
+Import('SDK_LIB')
+
+cwd = GetCurrentDir()
+
+
+# add general drivers
+src = []
+path =  [cwd]
+
+
+src += Glob('dev_mpu.c')
+
+if GetDepend(['BSP_USING_SPI1']) and GetDepend(['RT_USING_SFUD']):
+    src += Glob('spi_flash_init.c')
+
+if GetDepend(['BSP_USING_SPI1']) and GetDepend(['RT_USING_SFUD']) and GetDepend(['RT_USING_FAL']): 
+    src += Glob('fal/fal_user_init.c')
+    path += [cwd + '/fal']
+
+if GetDepend(['BSP_USING_SPI1']) and GetDepend(['RT_USING_SFUD']) and GetDepend(['RT_USING_FAL']) and GetDepend(['PKG_USING_EASYFLASH']): 
+    src += Glob('fal/ef_fal_port.c')
+
+CPPDEFINES = ['STM32H750xx']
+group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path, CPPDEFINES = CPPDEFINES)
+
+
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')

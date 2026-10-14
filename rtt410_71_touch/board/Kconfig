@@ -1,0 +1,119 @@
+menu "Hardware Drivers Config"
+
+config SOC_STM32H750XB
+    bool
+    select SOC_SERIES_STM32H7
+    select RT_USING_COMPONENTS_INIT
+    select RT_USING_USER_MAIN
+    default y
+
+menu "Onboard Peripheral Drivers"
+
+endmenu
+
+menu "On-chip Peripheral Drivers"
+
+
+    menuconfig BSP_USING_UART
+        bool "Enable UART"
+        default n
+        if BSP_USING_UART
+            config BSP_USING_UART4
+                bool "Enable UART4 (FinSH)"
+                default n
+
+            menu "UART4 Configuration"
+                depends on BSP_USING_UART4
+
+                config BSP_UART4_RX_BUFSIZE
+                    int "RX buffer size"
+                    default 256
+
+                config BSP_UART4_TX_BUFSIZE
+                    int "TX buffer size"
+                    default 256
+
+            endmenu
+
+        endif
+
+    config BSP_USING_SDRAM
+        bool "Enable SDRAM"
+        default n
+
+    menuconfig BSP_USING_SPI
+        bool "Enable SPI"
+        default n
+        if BSP_USING_SPI
+            config BSP_USING_SPI1
+                bool "Enable SPI1 (flash)"
+                default n
+            
+            config BSP_USING_SPI2
+                bool "Enable SPI2 (LCD)"
+                default n
+            menu "SPI2 Configuration"
+                depends on BSP_USING_SPI2
+                
+                config BSP_SPI2_TX_USING_DMA
+                    bool "Enable SPI2 TX using DMA"
+                    default n
+
+                config BSP_USING_SPI_LCD_ILI9488
+                    bool "Enable SPI2 LCD ILI9488"
+                    default n
+            endmenu
+        endif
+
+    menuconfig BSP_USING_SDIO_ARTPI
+        bool "Enable SDIO"
+        default n
+        if BSP_USING_SDIO_ARTPI
+            config BSP_USING_SDIO1
+                bool "Enable SDIO1 (SD)"
+                default n
+            config BSP_USING_SDIO2
+                bool "Enable SDIO2 (wifi)"
+                default n
+            menu "Wifi(AP6212) Library Configuration"
+                depends on BSP_USING_SDIO2
+                
+                config ART_PI_USING_WIFI_6212_LIB
+                    bool "Using Wifi(AP6212) Library"
+                    default n
+            endmenu
+        endif
+
+    menuconfig BSP_USING_I2C
+        bool "Enable I2C BUS (software simulation)"
+        default n
+        if BSP_USING_I2C
+
+            config BSP_USING_I2C2
+                bool "Enable I2C2 BUS (touch)"
+                default n
+
+                menu "I2C2 Configuration"
+                    depends on BSP_USING_I2C2
+                    comment "Notice: PH13 --> 125; PH15 --> 127"
+                    config BSP_I2C2_SCL_PIN
+                        int "i2c2 scl pin number"
+                        range 1 176
+                        default 127
+                    config BSP_I2C2_SDA_PIN
+                        int "I2C2 sda pin number"
+                        range 0 175
+                        default 125
+                endmenu
+        endif
+
+
+    source "$SDK_DIR/libraries/HAL_Drivers/Kconfig"
+    
+endmenu
+
+menu "Board extended module Drivers"
+
+endmenu
+ 
+endmenu
