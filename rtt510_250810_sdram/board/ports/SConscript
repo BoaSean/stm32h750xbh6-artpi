@@ -12,7 +12,7 @@ src = []
 path =  [cwd]
 
 
-src += Glob('dev_mpu.c')
+src += Glob('drv_mpu.c')
 
 CPPDEFINES = ['STM32H750xx']
 group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path, CPPDEFINES = CPPDEFINES)

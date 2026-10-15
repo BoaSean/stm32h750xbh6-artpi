@@ -12,7 +12,7 @@ src = []
 path =  [cwd]
 
 
-src += Glob('dev_mpu.c')
+src += Glob('drv_mpu.c')
 
 if GetDepend(['BSP_USING_SPI1']) and GetDepend(['RT_USING_SFUD']):
     src += Glob('spi_flash_init.c')
